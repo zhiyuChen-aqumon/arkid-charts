@@ -76,6 +76,14 @@ data:
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
 
+        location /saml/ {
+            proxy_pass http://{{ template "arkid.fullname" . }}:{{ .Values.service.webServer.port }}; 
+            proxy_set_header Host $host;
+            proxy_set_header Arker portal;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
         location = / {
             proxy_pass http://{{ template "arkid.fullname" . }}-fe:{{ .Values.service.feServer.port }}/_/s/oneid.html;
             proxy_set_header Host $host;

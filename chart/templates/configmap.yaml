@@ -13,9 +13,9 @@ data:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': '{{ .Values.persistence.mysql.database }}',
-            'USER': 'root',
+            'USER': '{{ default "root" .Values.persistence.mysql.user}}',
             'PASSWORD': '{{ .Values.persistence.mysql.rootPassword }}',
-            'HOST': '127.0.0.1',
+            'HOST': '{{ default "127.0.0.1" .Values.persistence.mysql.host}}',
             'PORT': '{{ .Values.service.mysqlDatabase.port }}',
             'OPTIONS': {
                 'autocommit': True,

@@ -74,6 +74,7 @@ spec:
           image: "{{ .Values.image.redis.repository }}:{{ .Values.image.redis.tag }}"
           imagePullPolicy: {{ .Values.image.redis.pullPolicy }}
 
+          {{- if not .Values.persistence.use_existing_db }}
         - name: "{{ .Chart.Name }}-{{ .Values.image.mysqlDatabase.name }}"
           image: "{{ .Values.image.mysqlDatabase.repository}}:{{ .Values.image.mysqlDatabase.tag }}"
           imagePullPolicy: {{ .Values.image.mysqlDatabase.pullPolicy }}
@@ -95,17 +96,18 @@ spec:
             - name: arkid-data
               mountPath: /etc/mysql/conf.d
               subPath: mysql/config
+          {{ end }}
 
         - name: "{{ .Chart.Name }}-{{ .Values.image.ldap.name }}"
           image: "{{ .Values.image.ldap.repository }}:{{ .Values.image.ldap.tag }}"
           imagePullPolicy: {{ .Values.image.ldap.pullPolicy }}
           env:
           - name: SQL_HOST
-            value: "127.0.0.1"
+            value: "{{ default "127.0.0.1" .Values.persistence.mysql.host}}"
           - name: SQL_PORT
             value: "3306"
           - name: SQL_USER
-            value: "root"
+            value: "{{ default "root" .Values.persistence.mysql.user}}"
           - name: SQL_PWD
             value: "{{ .Values.persistence.mysql.rootPassword}}"
           - name: LDAP_PASSWORD

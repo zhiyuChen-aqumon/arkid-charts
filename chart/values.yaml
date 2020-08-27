@@ -70,9 +70,14 @@ ldapService:
 
 persistence:  # mysql
   init: false
+  # 'true' if you want to use your own mysql instance
+  use_existing_db: false
   mysql:
     rootPassword: root
     database: arkid
+    # custom mysql user & host 
+    # user: 'root'
+    # host: '127.0.0.1'
   claimName: arkid
   storageClass: null
   accessMode: ReadWriteOnce
